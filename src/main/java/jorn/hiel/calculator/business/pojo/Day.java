@@ -1,5 +1,6 @@
-package jorn.hiel.calculator.business;
+package jorn.hiel.calculator.business.pojo;
 
+import jorn.hiel.calculator.business.enums.DayState;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,9 +13,11 @@ import java.time.LocalTime;
 @Setter
 @ToString
 public class Day {
-    LocalDate date;
-    LocalTime arrival;
-    LocalTime departure;
+    private LocalDate date;
+    private LocalTime arrival;
+    private LocalTime departure;
+    private DayState daystate=DayState.regular;
+
 
     public Duration getBetween() {
         return Duration.between(arrival, departure);
