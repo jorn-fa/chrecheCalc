@@ -14,6 +14,9 @@ public class Runner {
         FileMarker fileMarker=new FileMarker();
         try {
             fileMarker.createFile("crecheTester.txt");
+            fileMarker.addFileName("jorn.test");
+            System.out.println(fileMarker.hasFileName("jorn.test"));
+
         } catch (IOException e) {
             e.printStackTrace();
         }

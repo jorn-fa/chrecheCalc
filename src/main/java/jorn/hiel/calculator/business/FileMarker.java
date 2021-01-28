@@ -6,6 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Hiel Jorn
@@ -13,37 +18,66 @@ import java.io.IOException;
 @Slf4j
 public class FileMarker {
 
+    private String sourceFileLocation;
+    private List<String> sourceFileNames;
+    private List<String> originalContent;
+    private FileWriter fileWriter;
+
     /**
-     * Default constructor
+     * Reads the contents of the previously saved file containing the pdf filenames
      */
-    public FileMarker() {
+
+    private void readFile(){
+
+        try {
+            String content = Files.readString(Paths.get(sourceFileLocation), StandardCharsets.US_ASCII);
+             String split[] = content.split("\\r?\\n");
+             sourceFileNames = new ArrayList<>();
+             originalContent = new ArrayList<>();
+            for (String fileName: split  ) {
+                sourceFileNames.add(fileName);
+            }
+            originalContent.addAll(sourceFileNames);
+
+             log.debug("file " + sourceFileLocation + "split into lines");
+
+         } catch (IOException e) {
+           log.debug(e.getMessage());
+        }
     }
 
     /**
-     * location of the previous saved file
+     * saves the memory content to file
      */
-    private String sourceFileLocation;
+    private void saveFile(){
+      fileWriter=new FileWriter();
+      fileWriter.writeToFile(sourceFileLocation,originalContent,sourceFileNames);
+      log.debug("writing to file filenames to memory file:");
+      log.debug("original read file ->"+ originalContent.size());
+      log.debug("new content -> " + sourceFileNames.size());
+      fileWriter=null;
+    }
 
 
-    /**
+        /**
      * @param fileName
      */
     public void addFileName(String fileName) {
-        // TODO implement here
+        sourceFileNames.add(fileName);
     }
 
     /**
      * @param fileName
      */
-    public void hasFileName(String fileName) {
-        // TODO implement here
+    public boolean hasFileName(String fileName) {
+        return sourceFileNames.contains(fileName);
     }
 
     /**
      * @param fileName
      */
     public void eraseFileName(String fileName) {
-        // TODO implement here
+        sourceFileNames.remove(fileName);
     }
 
     /**
@@ -53,12 +87,13 @@ public class FileMarker {
      */
     public void createFile(@NonNull String fileName) throws IOException {
         String folder = FileSystemView.getFileSystemView().getDefaultDirectory().getPath();
-        String location = folder+File.separator+fileName;
-        File file= new File(location);
+        sourceFileLocation = folder+File.separator+fileName;
+        File file= new File(sourceFileLocation);
         if (file.createNewFile()) {
             log.debug("File created -> " + folder);
         } else {
-            log.debug("File found");
+            log.debug("File found - Reading file");
+            readFile();
 
         }
     }
