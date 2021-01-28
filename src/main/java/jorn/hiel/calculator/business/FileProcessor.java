@@ -69,12 +69,14 @@ public class FileProcessor {
     /**
      * @param folderName
      *
-     * Gets list of files specified on the given folder
+     * Gets list of PDF files specified on the given folder
      */
     public void readFolderContent(@NonNull String folderName) {
         try (Stream<Path> walk = Files.walk(Paths.get(folderName))) {
 
             result  = walk.filter(Files::isRegularFile)
+                    .filter(x -> x.toString().endsWith(".pdf"))
+
                     .map(Path::toString).collect(Collectors.toList());
 
 

@@ -21,7 +21,7 @@ public class FileMarker {
     private String sourceFileLocation;
     private List<String> sourceFileNames;
     private List<String> originalContent;
-    private FileWriter fileWriter;
+    private FileNameWriter fileNameWriter;
 
     /**
      * Reads the contents of the previously saved file containing the pdf filenames
@@ -49,13 +49,18 @@ public class FileMarker {
     /**
      * saves the memory content to file
      */
-    private void saveFile(){
-      fileWriter=new FileWriter();
-      fileWriter.writeToFile(sourceFileLocation,originalContent,sourceFileNames);
-      log.debug("writing to file filenames to memory file:");
-      log.debug("original read file ->"+ originalContent.size());
-      log.debug("new content -> " + sourceFileNames.size());
-      fileWriter=null;
+    public void saveFile(){
+      fileNameWriter=new FileNameWriter();
+        try {
+            fileNameWriter.writeToFile(sourceFileLocation,originalContent,sourceFileNames);
+            log.debug("writing to file filenames to memory file:");
+            log.debug("original read file ->"+ originalContent.size());
+            log.debug("new content -> " + sourceFileNames.size());
+        } catch (IOException e) {
+            log.debug(e.getMessage());
+        }
+
+      fileNameWriter=null;
     }
 
 
