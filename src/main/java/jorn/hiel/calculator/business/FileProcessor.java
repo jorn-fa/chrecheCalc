@@ -1,6 +1,7 @@
 package jorn.hiel.calculator.business;
 
 import jorn.hiel.calculator.business.pojo.Day;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -16,15 +18,22 @@ import java.util.stream.Stream;
  * @author Hiel Jorn
  */
 @Slf4j
-public class FileProcesser {
+public class FileProcessor {
 
+    @Getter
     List<String> result;
 
     /**
      * Default constructor
      */
-    public FileProcesser() {
+    public FileProcessor() {
+        result=new ArrayList<String>();
     }
+
+    /**
+     * @param where
+     */
+    public void getPreviousProcessedFiles(String where){}
 
 
 
@@ -59,13 +68,14 @@ public class FileProcesser {
 
     /**
      * @param folderName
+     *
+     * Gets list of files specified on the given folder
      */
     public void readFolderContent(@NonNull String folderName) {
         try (Stream<Path> walk = Files.walk(Paths.get(folderName))) {
 
             result  = walk.filter(Files::isRegularFile)
-                    .map(x -> x.toString()).collect(Collectors.toList());
-
+                    .map(Path::toString).collect(Collectors.toList());
 
 
         } catch (IOException e) {

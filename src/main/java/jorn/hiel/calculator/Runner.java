@@ -1,6 +1,8 @@
 package jorn.hiel.calculator;
 
-import jorn.hiel.calculator.business.PdfReader;
+import jorn.hiel.calculator.business.FileMarker;
+
+import java.io.IOException;
 
 public class Runner {
 
@@ -9,11 +11,12 @@ public class Runner {
     public static void main(String[] args) {
 
         System.out.println("Running");
-        String where= "C:/temp/tester2.pdf";
-
-        PdfReader reader = new PdfReader();
-        reader.readFile(where);
-        System.out.println(reader.getArrival());
+        FileMarker fileMarker=new FileMarker();
+        try {
+            fileMarker.createFile("crecheTester.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }

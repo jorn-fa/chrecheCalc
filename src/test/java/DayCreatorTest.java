@@ -1,5 +1,7 @@
+import interfaces.StandardTestNames;
 import jorn.hiel.calculator.business.DayCreator;
 import jorn.hiel.calculator.business.enums.DayState;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +13,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class DayCreatorTest {
+public class DayCreatorTest implements StandardTestNames {
 
     private final DayCreator dayCreator = new DayCreator();
     private String where;
@@ -25,6 +27,10 @@ public class DayCreatorTest {
         where=file.getAbsolutePath();
     }
 
+    @AfterEach
+    public void letDown() {
+      where="";
+    }
 
 
     @Test
