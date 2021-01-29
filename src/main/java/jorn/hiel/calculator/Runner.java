@@ -17,6 +17,7 @@ public class Runner {
         try {
             fileProcessor.readFolderContent("c:/chreche/");
             fileProcessor.processFiles();
+            fileProcessor.printFound();
 
 
             fileProcessor.getPreviousProcessedFiles("crecheTester.txt");

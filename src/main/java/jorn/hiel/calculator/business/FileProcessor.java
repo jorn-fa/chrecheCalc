@@ -34,6 +34,7 @@ public class FileProcessor {
         result=new ArrayList<>();
         fileMarker=new FileMarker();
         days=new ArrayList<>();
+        previousFiles=new ArrayList<>();
     }
 
     /**
@@ -105,6 +106,18 @@ public class FileProcessor {
      */
     public void processFiles() {
         PdfReader reader = new PdfReader();
-        reader.readFile("x");
+        DayCreator creator = new DayCreator();
+        for (String fileName:result) {
+            if (!previousFiles.contains(fileName)){
+                saveDay(creator.createDay(fileName));
+
+            reader.readFile(fileName);
+
+            }
+        }
+    }
+
+    public void printFound(){
+        days.forEach(System.out::println);
     }
 }
