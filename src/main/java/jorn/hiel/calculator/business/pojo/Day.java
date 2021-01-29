@@ -16,11 +16,13 @@ public class Day {
     private LocalDate date;
     private LocalTime arrival;
     private LocalTime departure;
+    @ToString.Exclude
     private DayState daystate=DayState.regular;
 
 
     public Duration getBetween() {
         return Duration.between(arrival, departure);
     }
+
 
 }

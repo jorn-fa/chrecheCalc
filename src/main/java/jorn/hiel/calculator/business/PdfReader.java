@@ -78,6 +78,7 @@ public class PdfReader {
             arrival = getHour(searchMe(lines, "aankomst"));
             departure = getHour(searchMe(lines, "vertrek"));
             date= getDate(searchMe(lines, "2021"));
+            document.close();
 
         } catch (IOException e) {
                 log.error(e.getMessage());
