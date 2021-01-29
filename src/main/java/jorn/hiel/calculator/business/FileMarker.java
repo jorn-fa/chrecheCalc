@@ -9,8 +9,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Hiel Jorn
@@ -21,7 +20,7 @@ public class FileMarker {
     private String sourceFileLocation;
     private List<String> sourceFileNames;
     private List<String> originalContent;
-    private FileNameWriter fileNameWriter;
+
 
     /**
      * Reads the contents of the previously saved file containing the pdf filenames
@@ -31,12 +30,10 @@ public class FileMarker {
 
         try {
             String content = Files.readString(Paths.get(sourceFileLocation), StandardCharsets.US_ASCII);
-             String split[] = content.split("\\r?\\n");
+             String[] split = content.split("\\r?\\n");
              sourceFileNames = new ArrayList<>();
              originalContent = new ArrayList<>();
-            for (String fileName: split  ) {
-                sourceFileNames.add(fileName);
-            }
+            sourceFileNames.addAll(Arrays.asList(split));
             originalContent.addAll(sourceFileNames);
 
              log.debug("file " + sourceFileLocation + "split into lines");
@@ -50,7 +47,7 @@ public class FileMarker {
      * saves the memory content to file
      */
     public void saveFile(){
-      fileNameWriter=new FileNameWriter();
+        FileNameWriter fileNameWriter=new FileNameWriter();
         try {
             fileNameWriter.writeToFile(sourceFileLocation,originalContent,sourceFileNames);
             log.debug("writing to file filenames to memory file:");
@@ -60,29 +57,24 @@ public class FileMarker {
             log.debug(e.getMessage());
         }
 
-      fileNameWriter=null;
     }
 
 
         /**
      * @param fileName
+         * adds filename to sourceFile list
      */
     public void addFileName(String fileName) {
-        sourceFileNames.add(fileName);
+        if (!hasFileName(fileName)){
+        sourceFileNames.add(fileName);}
     }
 
     /**
      * @param fileName
+     * checks if sourceFile list contains give sourceFileName
      */
     public boolean hasFileName(String fileName) {
         return sourceFileNames.contains(fileName);
-    }
-
-    /**
-     * @param fileName
-     */
-    public void eraseFileName(String fileName) {
-        sourceFileNames.remove(fileName);
     }
 
     /**
@@ -101,6 +93,15 @@ public class FileMarker {
             readFile();
 
         }
+
+    }
+
+    /**
+      * @return unmodifiable list of the previous fileNames
+     */
+
+    public List<String> getOriginalContent(){
+        return  Collections.unmodifiableList(originalContent);
     }
 
 }

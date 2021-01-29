@@ -63,6 +63,9 @@ public class PdfReader {
 
 
     public void readFile(@NonNull String fileName) {
+        arrival=null;
+        departure=null;
+        date=null;
 
         try {
             File file = new File(fileName);

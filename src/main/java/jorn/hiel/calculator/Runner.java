@@ -1,6 +1,7 @@
 package jorn.hiel.calculator;
 
 import jorn.hiel.calculator.business.FileMarker;
+import jorn.hiel.calculator.business.FileProcessor;
 
 import java.io.IOException;
 
@@ -12,12 +13,21 @@ public class Runner {
 
         System.out.println("Running");
         FileMarker fileMarker=new FileMarker();
+        FileProcessor fileProcessor = new FileProcessor();
         try {
-            fileMarker.createFile("crecheTester.txt");
-            fileMarker.addFileName("jorn.test");
-            fileMarker.addFileName("lijn4eneenhalf");
-            fileMarker.addFileName("lijn3");
-            fileMarker.saveFile();
+            fileProcessor.readFolderContent("c:/chreche/");
+            fileProcessor.processFiles();
+
+
+            fileProcessor.getPreviousProcessedFiles("crecheTester.txt");
+
+            fileProcessor.markFile("jorn.test");
+            fileProcessor.markFile("lijn4eneenhalf");
+            fileProcessor.markFile("lijn3");
+            fileProcessor.markFile("volledige nieuw file");
+            fileProcessor.saveMarked();
+
+
 
 
         } catch (IOException e) {

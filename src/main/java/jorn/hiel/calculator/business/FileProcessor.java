@@ -21,34 +21,40 @@ import java.util.stream.Stream;
 public class FileProcessor {
 
     @Getter
-    List<String> result;
+    private List<String> result;
+    private final FileMarker fileMarker;
+    private List<String> previousFiles;
+    private List<Day> days;
+
 
     /**
      * Default constructor
      */
     public FileProcessor() {
-        result=new ArrayList<String>();
+        result=new ArrayList<>();
+        fileMarker=new FileMarker();
+        days=new ArrayList<>();
     }
 
     /**
      * @param where
+     * loads fileName version file
      */
-    public void getPreviousProcessedFiles(String where){}
+    public void getPreviousProcessedFiles(String where) throws IOException {
 
+            fileMarker.createFile(where);
+            this.previousFiles=fileMarker.getOriginalContent();
 
-
-    /**
-     * @param fileName
-     */
-    private void markAsProcessed(String fileName) {
-        // TODO implement here
     }
+
+
 
     /**
      * @param  fileName
      */
     public void markFile( String fileName) {
-        // TODO implement here
+        if (!previousFiles.contains(fileName)){
+        fileMarker.addFileName(fileName);}
     }
 
     /**
@@ -60,10 +66,11 @@ public class FileProcessor {
     }
 
     /**
-     * @param day
+     * @param day  which day to save
      */
     public void saveDay(Day day) {
-        // TODO implement here
+        days.add(day);
+        log.debug("stored day in collection");
     }
 
     /**
@@ -75,15 +82,29 @@ public class FileProcessor {
         try (Stream<Path> walk = Files.walk(Paths.get(folderName))) {
 
             result  = walk.filter(Files::isRegularFile)
-                    .filter(x -> x.toString().endsWith(".pdf"))
-
-                    .map(Path::toString).collect(Collectors.toList());
+                    .map(Path::toString)
+                    .filter(s -> s.endsWith(".pdf")).collect(Collectors.toList());
 
 
         } catch (IOException e) {
            log.error(e.getMessage());
         }
 
+
     }
 
+    /**
+     *  saves the marked file list
+     */
+    public void saveMarked() {
+        fileMarker.saveFile();
+    }
+
+    /**
+     * process pdf files in previous specified folder
+     */
+    public void processFiles() {
+        PdfReader reader = new PdfReader();
+        reader.readFile("x");
+    }
 }
