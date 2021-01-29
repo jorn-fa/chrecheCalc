@@ -21,6 +21,7 @@ public class Day {
 
 
     public Duration getBetween() {
+
         return Duration.between(arrival, departure);
     }
 
