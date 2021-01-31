@@ -15,18 +15,14 @@ public class Runner {
         FileMarker fileMarker=new FileMarker();
         FileProcessor fileProcessor = new FileProcessor();
         try {
+            fileProcessor.getPreviousProcessedFiles("crecheTester.txt");
             fileProcessor.readFolderContent("c:/chreche/");
             fileProcessor.processFiles();
             fileProcessor.printFound();
-
-
-            fileProcessor.getPreviousProcessedFiles("crecheTester.txt");
-
-            fileProcessor.markFile("jorn.test");
-            fileProcessor.markFile("lijn4eneenhalf");
-            fileProcessor.markFile("lijn3");
-            fileProcessor.markFile("volledige nieuw file");
             fileProcessor.saveMarked();
+
+
+
 
 
 

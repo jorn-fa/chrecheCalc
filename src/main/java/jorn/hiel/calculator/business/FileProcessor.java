@@ -53,7 +53,7 @@ public class FileProcessor {
     /**
      * @param  fileName
      */
-    public void markFile( String fileName) {
+    private void markFile( String fileName) {
         if (!previousFiles.contains(fileName)){
         fileMarker.addFileName(fileName);}
     }
@@ -112,6 +112,10 @@ public class FileProcessor {
                 saveDay(creator.createDay(fileName));
 
             reader.readFile(fileName);
+            if(creator.getDay().getBetween().getSeconds()>0){
+                this.markFile(fileName);
+
+            }
 
             }
         }

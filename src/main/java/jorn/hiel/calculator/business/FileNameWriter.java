@@ -39,17 +39,17 @@ public class FileNameWriter {
         compareContents();
 
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+
 
        difference.forEach(x -> {
-           try {
+           try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))){
                writer.append(x.toString()+"\n");
            } catch (IOException e) {
                log.debug(e.getMessage());
            }
        });
 
-        writer.close();
+
     }
 
     /**
