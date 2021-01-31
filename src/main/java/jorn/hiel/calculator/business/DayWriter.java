@@ -1,7 +1,13 @@
 package jorn.hiel.calculator.business;
 
+import com.opencsv.CSVWriter;
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import jorn.hiel.calculator.business.pojo.Day;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -17,6 +23,7 @@ public class DayWriter{
 
 
     private List<Day> days;
+    @Setter
     private String fileLocation;
     private List<Day> originalDays;
 
@@ -26,15 +33,22 @@ public class DayWriter{
         originalDays=new ArrayList<>();
     }
 
+    private boolean canWrite()  {
+
+
+
+        return !fileLocation.isEmpty();
+    }
 
     /**
      * @param addTheseDays
      *
      * add newly processed days to the previous saved ones
      */
-    public void writeDays(List<Day> addTheseDays) {
+    public void writeDays(List<Day> addTheseDays) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 
         if (canWrite()) {
+            System.out.println("passing");
 
             days = new ArrayList<>(); //nuke any older ones
             for (Day day : addTheseDays) {
@@ -43,17 +57,20 @@ public class DayWriter{
                 }
             }
 
-            //todo   Day to csv format
+            Writer writer  = new FileWriter(fileLocation);
 
-            days.forEach(x -> {
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileLocation, true))) {
-                    writer.append(x.toString() + "\n");
-                } catch (IOException e) {
-                    log.debug(e.getMessage());
-                }
-            });
+            System.out.println(days.size());
+
+
+            StatefulBeanToCsv sbc = new StatefulBeanToCsvBuilder(writer)
+                    .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
+                    .build();
+            sbc.write(days);
+            writer.close();
+
         }
     }
+
 
     /**
      * throws invalidParameter if fileLocation has not been set or
@@ -75,22 +92,15 @@ public class DayWriter{
 
 
 
-    private boolean canWrite(){return !fileLocation.isEmpty()&&!new File(fileLocation).exists();}
+
 
     /**
      * @return days from previous saved file
      */
     public List<Day> getDays() {
-        // TODO implement here
-        return null;
+       return days;
     }
 
-    /**
-     * @param location
-     * specify where the previous saved file location is
-     */
-    public void setFileLocation(String location ) {
-        // TODO implement here
-    }
+
 
 }
