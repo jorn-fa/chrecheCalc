@@ -62,9 +62,13 @@ public class DayWriter{
             System.out.println(days.size());
 
 
+
+
             StatefulBeanToCsv sbc = new StatefulBeanToCsvBuilder(writer)
                     .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
                     .build();
+
+
             sbc.write(days);
             writer.close();
 

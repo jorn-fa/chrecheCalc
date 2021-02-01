@@ -1,6 +1,7 @@
 package jorn.hiel.calculator.business.pojo;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvDate;
 import jorn.hiel.calculator.business.enums.DayState;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,15 +18,15 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class Day {
     @CsvBindByName(column = "date")
-
+    @CsvDate(value = "yyyy-MM-dd")
     private LocalDate date;
 
     @CsvBindByName(column = "arrival")
-
+    @CsvDate(value = "H:mm")
     private LocalTime arrival;
 
     @CsvBindByName(column = "departure")
-
+    @CsvDate(value = "H:mm")
     private LocalTime departure;
 
 
