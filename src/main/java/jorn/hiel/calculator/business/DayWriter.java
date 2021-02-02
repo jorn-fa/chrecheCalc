@@ -25,7 +25,7 @@ public class DayWriter{
     private List<Day> days;
     @Setter
     private String fileLocation;
-    private List<Day> originalDays;
+    private final List<Day> originalDays;
 
     public DayWriter() {
         days=new ArrayList<>();
@@ -34,9 +34,6 @@ public class DayWriter{
     }
 
     private boolean canWrite()  {
-
-
-
         return !fileLocation.isEmpty();
     }
 
@@ -57,20 +54,13 @@ public class DayWriter{
                 }
             }
 
-            Writer writer  = new FileWriter(fileLocation);
+            try (Writer writer = new FileWriter(fileLocation)) {
+                StatefulBeanToCsv sbc = new StatefulBeanToCsvBuilder(writer)
+                        .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
+                        .build();
+                sbc.write(days);
 
-            System.out.println(days.size());
-
-
-
-
-            StatefulBeanToCsv sbc = new StatefulBeanToCsvBuilder(writer)
-                    .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
-                    .build();
-
-
-            sbc.write(days);
-            writer.close();
+            }
 
         }
     }
@@ -81,7 +71,7 @@ public class DayWriter{
      * set file does not exist
      */
     public void readPreviousDays() throws InvalidParameterException, FileNotFoundException {
-        if (canWrite()){
+        if (!canWrite()){
             throw new InvalidParameterException("Empty fileLocation");
         }
 
@@ -90,7 +80,10 @@ public class DayWriter{
                 .build()
                 .parse();
 
-        beans.forEach(System.out::println);
+
+        originalDays.addAll(beans);
+        log.debug("adding found days into original collection ->" + originalDays.size() + "items");
+
 
     }
 
