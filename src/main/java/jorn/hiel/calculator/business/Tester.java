@@ -33,9 +33,10 @@ public class Tester {
         writer.getDays().add(dayOne);
         writer.setFileLocation(where);
         writer.writeDays(writer.getDays());
+        writer.readPreviousDays();
 
 
-        readFile(writer);
+        //readFile(writer);
 
 
 
